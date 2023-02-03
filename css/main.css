@@ -1,0 +1,257 @@
+* {
+    /* 初始化 */
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    /* 100%窗口宽度和高度 */
+    width: 100vw;
+    height: 100vh;
+    /* 溢出隐藏 */
+    overflow: hidden;
+    /* 设置背景 */
+    background: url("../img/4.png") no-repeat;
+    background-size: cover;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    /* 弹性布局 水平排列 */
+    display: flex;
+}
+
+/* 字体图标 */
+.icon {
+    color: rgb(164, 248, 164);
+    font-size: 24px;
+}
+
+/* 左侧导航栏 */
+.left-box {
+    width: 230px;
+    /* 半透明背景 */
+    background-color: rgba(0, 0, 0, 0.65);
+    /* 相对定位 */
+    position: relative;
+    color: rgb(255, 189, 189);
+    font-size: 14px;
+    /* 弹性布局 垂直排列 */
+    display: flex;
+    flex-direction: column;
+    /* 设置过渡 */
+    transition: 0.5s ease;
+    /* 不让文字换行 */
+    white-space: nowrap;
+    margin: 5px;
+    border-radius: 10px;
+
+
+
+}
+
+.left-box ul {
+    list-style: none;
+    width: 90%;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    /* 高度铺满 */
+    flex: 1;
+}
+
+.left-box li {
+    height: 46px;
+    /* 弹性布局 垂直居中 */
+    display: flex;
+    align-items: center;
+    padding-left: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    /* 过渡 */
+    transition: 0.3s;
+}
+
+/* 选中态样式 */
+.left-box li.active,
+.left-box li.active:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.left-box li:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.left-box hr {
+    width: 90%;
+    margin: 10px auto;
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.left-box .icon {
+    margin-right: 20px;
+}
+
+.left-box p {
+    margin-left: 26px;
+    margin-bottom: 10px;
+}
+
+/* 用户信息区域 */
+.user-info {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    padding: 24px;
+}
+
+.user-info img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+    border: 2px solid #ffffff;
+}
+
+.user-info span {
+    margin-left: 7px;
+    flex: 1;
+    letter-spacing: 1px;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.user-info .icon {
+    font-size: 20px;
+    margin-right: 0;
+}
+
+/* 右侧区域 */
+.right-box {
+    margin: 5px;
+    margin-left: 0px;
+    /* 半透明背景 */
+    background-color: rgba(0, 0, 0, 0.65);
+
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+
+/* 展开收起开关 */
+.right-box .handler {
+    width: 10px;
+    height: 50px;
+    margin-left: 3px;
+    /* 绝对定位 垂直居中 */
+    transform: translateY(-50%);
+    z-index: 1;
+    /* 光标变小手 */
+    cursor: pointer;
+    /* 默认不透明度为0 */
+    opacity: 0;
+    /* 过渡 */
+    transition: opacity 0.3s;
+}
+
+.right-box .handler::before,
+.right-box .handler::after {
+    content: "";
+    background-color: rgba(255, 255, 255, 0.2);
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    border-radius: 10px 10px 0 0;
+    /* 过渡 */
+    transition: 0.2s;
+}
+
+.right-box .handler::after {
+    bottom: 0;
+    border-radius: 0 0 10px 10px;
+}
+
+.right-box:hover .handler {
+    opacity: 1;
+}
+
+.right-box .handler:hover::before {
+    transform: skewX(-15deg);
+}
+
+.right-box .handler:hover::after {
+    transform: skewX(15deg);
+}
+
+.right-box .handler.close:hover::before {
+    transform: skewX(15deg);
+}
+
+.right-box .handler.close:hover::after {
+    transform: skewX(-15deg);
+}
+
+ul {
+    list-style: none;
+}
+
+.li {
+    letter-spacing: 2px;
+    font-size: 17px;
+    font-weight: 600;
+    /* 动画过渡 */
+    transition: 0.3s;
+}
+
+
+.li ul {
+    padding: 0;
+    width: 0;
+    height: 100vh;
+    /* 半透明背景 */
+    background-color: rgba(0, 0, 0, 0.65);
+    /* 背景模糊（毛玻璃） */
+    backdrop-filter: blur(10px);
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    overflow: hidden;
+    transition: 0.3s;
+
+}
+
+.li ul li {
+    justify-content: center;
+    padding: 0;
+    /* 文字禁止换行 */
+    white-space: nowrap;
+    transition: 0.3s;
+}
+
+.li:hover ul {
+    padding-top: 140px;
+    width: 230px;
+}
+
+.li ul li:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.handler {}
+
+.main-body {
+    flex: 1;
+    color: rgb(255, 189, 189);
+    height: 100%;
+}
+
+.tab {
+    height: 100%;
+}

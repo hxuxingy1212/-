@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+</head>
+<style>
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: black;
+        shape-rendering: crispEdges;
+    }
+
+    .axis text {
+        font-family: sans-serif;
+        font-size: 11px;
+    }
+</style>
+
+<body>
+
+</body>
+
+
+<script>
+
+    //画布大小
+    var width = 400;
+    var height = 400;
+
+    //在 body 里添加一个 SVG 画布   
+    var svg = d3.select("body")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    var nodes = [{ name: "桂林" }, { name: "广州" },
+    { name: "厦门" }, { name: "杭州" },
+    { name: "上海" }, { name: "青岛" },
+    { name: "天津" }];
+
+    var edges = [{ source: 0, target: 1 }, { source: 0, target: 2 },
+    { source: 0, target: 3 }, { source: 1, target: 4 },
+    { source: 1, target: 5 }, { source: 1, target: 6 }];
+
+    var force = d3.layout.force()
+        .nodes(nodes) //指定节点数组
+        .links(edges) //指定连线数组
+        .size([width, height]) //指定作用域范围
+        .linkDistance(150) //指定连线长度
+        .charge([-1000]); //相互之间的作用力
+    force.start();    //开始作用
+    //添加连线 
+    var svg_edges = svg.selectAll("line")
+        .data(edges)
+        .enter()
+        .append("line")
+        .style("stroke", "#ccc")
+        .style("stroke-width", 1);
+    var color = d3.scale.category20();
+    //添加节点 
+    var svg_nodes = svg.selectAll("circle")
+        .data(nodes)
+        .enter()
+        .append("circle")
+        .attr("r", 20)
+        .style("fill", function (d, i) {
+            return color(i);
+        })
+        .call(force.drag);  //使得节点能够拖动
+
+    //添加描述节点的文字
+    var svg_texts = svg.selectAll("text")
+        .data(nodes)
+        .enter()
+        .append("text")
+        .style("fill", "black")
+        .attr("dx", 20)
+        .attr("dy", 8)
+        .text(function (d) {
+            return d.name;
+        });
+
+    force.on("tick", function () { //对于每一个时间间隔
+        //更新连线坐标
+        svg_edges.attr("x1", function (d) { return d.source.x; })
+            .attr("y1", function (d) { return d.source.y; })
+            .attr("x2", function (d) { return d.target.x; })
+            .attr("y2", function (d) { return d.target.y; });
+
+        //更新节点坐标
+        svg_nodes.attr("cx", function (d) { return d.x; })
+            .attr("cy", function (d) { return d.y; });
+
+        //更新文字坐标
+        svg_texts.attr("x", function (d) { return d.x; })
+            .attr("y", function (d) { return d.y; });
+    });
+
+    function toggleCircle(current, d) {
+        var currentD = d
+        console.log(current);
+        if (d.clickFlag) {
+            removeSingle()
+
+        }
+        d.clickFlag = true
+
+        var data = [{
+            population: 30,
+            value: 'X',
+            type: 'delete'
+        }, {
+            population: 30,
+            value: '收起',
+            type: 'showOn'
+        }, {
+            population: 30,
+            value: '展开',
+            type: 'showOff'
+        }]
+        var sum = d3.sum(data.map(function (d) {
+            return d.population
+        }))
+        for (i in data) {
+            data[i].Percentage = (data[i].population / sum * 100).toFixed(0) + "%";
+        }
+        var width = 300,
+            height = 300,
+            margin = { "left": 30, "top": 30, "right": 30, "bottom": 30 },
+            svg_width = width + margin.left + margin.right,
+            svg_height = height + margin.top + margin.bottom,
+            font_size = 15;
+        var g = current
+            .append("g")
+            .attr('class', 'singleCircle')
+            .attr("width", width)
+            .attr("height", height)
+        var Pie = g.append("g")
+        // .attr("transform","translate("+width/4+","+height/4+")")
+
+        var arc_generator = d3.arc()
+            .innerRadius(width / 6.5)
+            .outerRadius(width / 4)
+        var angle_data = d3.pie()
+            .value(function (d) {
+                return d.population;
+            })
+        var pieData = angle_data(data)
+        var pieAngle = pieData.map(function (p) {
+            return (p.startAngle + p.endAngle) / 2 / Math.PI * 180;
+        });
+
+        // var color=d3.schemeCategory10;
+
+        //生成内部圆环
+        Pie.selectAll("path")
+            .data(angle_data(data))
+            .enter()
+            .append("path")
+            .attr("d", arc_generator)
+            .style("fill", function (d, i) {
+                return 'grey';
+            })
+            .style('stroke', 'black')
+            .attr("class", "path")
+            .attr('type', function (d) {
+                return d.data.type
+            })
+            .on('click', function (d) {
+                if (d.data.type === 'delete') {
+                    deleteNode(currentD)
+                } else if (d.data.type === 'showOn') {
+                    deleteNextNodes(currentD)
+                } else {
+                    showMyList()
+                }
+                d3.event.stopPropagation()
+            })
+        var arc_label = d3.arc()
+            .innerRadius(width / 4)
+            .outerRadius(width / 2)
+
+        Pie.selectAll(".arc_label")
+            .data(angle_data(data))
+            .enter()
+            .append("path")
+            .attr("d", arc_label)
+            .attr("class", "arc_label")
+            .style("fill", "none")
+        const labelFontSize = 12;
+        const labelValRadius = (170 * 0.35 - labelFontSize * 0.35); // 计算正确半径 文字位置
+        const labelValRadius1 = (170 * 0.35 + labelFontSize * 0.35);
+
+
+        const labelsVals = current.select('.singleCircle').append('g')
+            .classed('labelsvals', true);
+
+        // 定义两条路径以使标签的方向正确
+        labelsVals.append('def')
+            .append('path')
+            .attr('id', 'label-path-1')
+            .attr('d', `m0 ${-labelValRadius} a${labelValRadius} ${labelValRadius} 0 1,1 -0.01 0`);
+        labelsVals.append('def')
+            .append('path')
+            .attr('id', 'label-path-2')
+            .attr('d', `m0 ${-labelValRadius1} a${labelValRadius1} ${labelValRadius1} 0 1,0 0.01 0`);
+
+        labelsVals.selectAll('text')
+            .data(data)
+            .enter()
+            .append('text')
+            .style('font-size', labelFontSize)
+            .style('fill', 'black')
+            .style('font-weight', "bold")
+            .style('text-anchor', 'middle')
+            .append('textPath')
+            .attr('href', function (d, i) {
+                const p = pieData[i];
+                const angle = pieAngle[i];
+                if (angle > 90 && angle <= 270) { // 根据角度选择路径
+                    return '#label-path-2';
+                } else {
+                    return '#label-path-1';
+                }
+            })
+            .attr('startOffset', function (d, i) {
+                const p = pieData[i];
+                const angle = pieAngle[i];
+                let percent = (p.startAngle + p.endAngle) / 2 / 2 / Math.PI * 100;
+                if (angle > 90 && angle <= 270) { // 分别计算每条路径的正确百分比
+                    return 100 - percent + "%";
+                }
+                return percent + "%";
+            })
+            .text(function (d) {
+                return d.value;
+            })
+            .on('click', function (d) {
+                if (d.type === 'delete') {
+                    deleteNode(currentD)
+                } else if (d.type === 'showOn') {
+                    deleteNextNodes(currentD)
+                } else {
+                    showMyList()
+                }
+                d3.event.stopPropagation()
+            }, true)
+    }
+
+    svg_nodes.on("click", toggleCircle);
+
+
+
+
+
+
+
+
+
+</script>
+
+</html>

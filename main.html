@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+    <title>家庭财务管理系统</title>
+
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+    <script src="./js/vue.js"></script>
+    <script src="./js/axios-0.18.0.js"></script>
+    <script src="element-ui/lib/index.js"></script>
+
+
+
+
+</head>
+
+<body>
+    <div id="app" class="container">
+        <div class="left-box">
+            <div class="user-info">
+                <img src="./img/1.jpg" alt="">
+                <span>草帽小子</span>
+            </div>
+
+            <p>这个人很懒什么都没留下。</p>
+            <hr>
+            <ul>
+                <li class="item active li" aria-hidden="true">
+                    <i class="icon el-icon-s-home fa"></i>
+                    首页
+                    <ul>
+                        <hr>
+                        <li>收支总览</li>
+                        <li>财产总览</li>
+                        <hr>
+                    </ul>
+                </li>
+                <li class="item li" aria-hidden="true">
+                    <i class="icon el-icon-user-solid fa"></i>
+                    账号管理
+                    <ul>
+                        <hr>
+                        <li>家庭账号</li>
+                        <li>角色管理</li>
+                        <li>权限设置</li>
+                        <hr>
+                    </ul>
+                </li>
+                <li class="item li" aria-hidden="true">
+                    <i class="icon el-icon-s-goods fa"></i>
+                    财务管理
+                    <ul>
+                        <hr>
+                        <li>个人资金</li>
+                        <li>固定收入</li>
+                        <li>固定支出</li>
+                        <li>其他收入</li>
+                        <li>其他支出</li>
+                        <li>收支类型</li>
+                        <hr>
+                    </ul>
+                </li>
+                <li class="item li" aria-hidden="true">
+                    <i class="icon el-icon-s-help fa"></i>
+                    统计查询
+                    <ul>
+                        <hr>
+                        <p style="
+                        font-size: 15px;
+                        font-weight: 300;text-align: justify;text-align: center;padding-right: 20px;">家庭统计</p>
+                        <hr>
+                        <li>收入支出占比</li>
+                        <li>年月收支趋势</li>
+                        <li>收入类型统计</li>
+                        <li>支出类型统计</li>
+                        <hr>
+                        <p style="
+                        font-size: 15px;
+                        font-weight: 300;text-align: justify;text-align: center;padding-right: 20px;">个人统计</p>
+                        <hr>
+                        <li>张三</li>
+                        <li>李四</li>
+                        <hr>
+                    </ul>
+                </li>
+                <li class="item li" aria-hidden="true">
+                    <i class="icon el-icon-s-claim fa"></i>
+                    计划管理
+                    <ul>
+                        <hr>
+                        <li>计划收入</li>
+                        <li>支出限额</li>
+                        <li>透支详情</li>
+                        <hr>
+                    </ul>
+                </li>
+                <li class="item li" aria-hidden="true">
+                    <i class="icon 
+                    el-icon-s-comment fa"></i>
+                    人情世故
+                    <ul>
+                        <hr>
+                        <li>总览</li>
+                        <li>日志</li>
+                        <li>人物关系图谱</li>
+                        <li>人物费用表单</li>
+                        <hr>
+                    </ul>
+                </li>
+                <hr>
+                <li class="item li" aria-hidden="true">
+                    <i class="icon  el-icon-message-solid
+                    fa"></i>
+                    项目详情
+                    <ul>
+                        <hr>
+                        <li>项目介绍</li>
+                        <li>相关技术</li>
+                        <li>系统架构</li>
+                        <hr>
+                        <p style="
+                        font-size: 15px;
+                        font-weight: 300;text-align: justify;text-align: center;padding-right: 20px;">技术分享</p>
+                        <hr>
+                        <li>neo4j介绍</li>
+                        <li>可视化技术</li>
+                        <li>权限方案</li>
+                        <hr>
+                    </ul>
+                </li>
+                <li class="item li" aria-hidden="true">
+                    <i class="icon el-icon-info fa"></i>
+                    关于作者
+                    <ul>
+                        <hr>
+                        <li>自我介绍</li>
+                        <li>技术栈</li>
+                        <li>其他项目</li>
+                        <hr>
+                    </ul>
+                </li>
+                <li class="item li" aria-hidden="true">
+                    <i class="icon el-icon-error fa"></i>
+                    退出登陆
+                </li>
+            </ul>
+
+        </div>
+
+        <div class="right-box">
+            <div class="handler"></div>
+            <div class="main-body">
+                <el-tabs class="tab" v-model="editableTabsValue" closable @tab-remove="removeTab">
+                    <el-tab-pane v-for="(item, index) in editableTabs" :key="item.name" :label="item.title"
+                        :name="item.name">
+                        {{item.content}}
+                    </el-tab-pane>
+                </el-tabs>
+
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+
+    new Vue({
+        el: "#app",
+        data: {
+            editableTabsValue: '2',
+            editableTabs: [{
+                title: 'Tab 1',
+                name: '1',
+                content: 'Tab 1 content'
+            }, {
+                title: 'Tab 2',
+                name: '2',
+                content: 'Tab 2 content'
+            }],
+            tabIndex: 2
+        },
+        methods: {
+            addTab(targetName) {
+                let newTabName = ++this.tabIndex + '';
+                this.editableTabs.push({
+                    title: 'New Tab',
+                    name: newTabName,
+                    content: 'New Tab content'
+                });
+                this.editableTabsValue = newTabName;
+            },
+            removeTab(targetName) {
+                let tabs = this.editableTabs;
+                let activeName = this.editableTabsValue;
+                if (activeName === targetName) {
+                    tabs.forEach((tab, index) => {
+                        if (tab.name === targetName) {
+                            let nextTab = tabs[index + 1] || tabs[index - 1];
+                            if (nextTab) {
+                                activeName = nextTab.name;
+                            }
+                        }
+                    });
+                }
+
+                this.editableTabsValue = activeName;
+                this.editableTabs = tabs.filter(tab => tab.name !== targetName);
+            }
+        },
+        mounted() {
+
+        }
+
+    })
+</script>
+<script src="./js/120.js"></script>
+
+</html>

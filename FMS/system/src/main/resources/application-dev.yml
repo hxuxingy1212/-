@@ -1,0 +1,47 @@
+server:
+  port: 8082
+management:
+  endpoint:
+    health:
+      show-details: always  #显示health的全部细节
+  endpoints:
+    web:
+      exposure:
+        include: "*"  #默认只有health，开启全部
+spring:
+  boot:
+    admin:
+      client:
+        url: http://localhost:8081
+  application:
+    name: systemservice
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+  #druid数据源相关信息
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/FMS?serverTimezone=UTC&useSSL=false
+      username: root
+      password: hxuxingy12
+#  devtools:
+#    restart:
+#      exclude: application.yml,static/**,public/*
+#      #设置不触发目录
+
+#mybatis-plus相关
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto                #设置id自动增长模式为自增长
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #日志打印
+    map-underscore-to-camel-case: false  #关闭了字段自动转换
+
+
+# 日志相关
+logging:
+  pattern:
+    console: "%d{MM.dd HH:ss} %clr(%p) [%clr(%-10.10t){blue}] %clr(%-25.25c){cyan} : %clr(%m) %clr(%n)"
