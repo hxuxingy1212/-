@@ -1,0 +1,4 @@
+redis相关key
+
+1. appellations:{用户id}
+2.

@@ -25,6 +25,14 @@ spring:
     nacos:
       server-addr: localhost:8848
 ====================================
+redis:
+启动：redis-server redis.conf
+
+====================================
+neo4j:
+启动：neo4j start
+浏览地址：http://localhost:7474/browser/
+====================================
 system:
 端口：8082
 
@@ -35,5 +43,8 @@ admin:
 ====================================
 gateway:
 端口：8080
+
+
+
 
 

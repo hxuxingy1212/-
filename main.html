@@ -7,15 +7,21 @@
 
     <title>家庭财务管理系统</title>
 
-    <link rel="stylesheet" href="./css/main.css">
+
     <link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
     <script src="./js/vue.js"></script>
     <script src="./js/axios-0.18.0.js"></script>
     <script src="element-ui/lib/index.js"></script>
 
+    <link rel="stylesheet" href="./css/main.css">
 
+    <script src="./js/jquery.min.js"></script>
 
-
+    <style>
+        iframe {
+            border: none
+        }
+    </style>
 </head>
 
 <body>
@@ -23,32 +29,19 @@
         <div class="left-box">
             <div class="user-info">
                 <img src="./img/1.jpg" alt="">
-                <span>草帽小子</span>
+                <span>{{accountInfo.account}}</span>
             </div>
 
-            <p>这个人很懒什么都没留下。</p>
+            <p>{{accountInfo.autograph}}</p>
             <hr>
             <ul>
-                <li class="item active li" aria-hidden="true">
+                <li class="item active li" aria-hidden="true" @click="shouye()">
                     <i class="icon el-icon-s-home fa"></i>
                     首页
-                    <ul>
-                        <hr>
-                        <li>收支总览</li>
-                        <li>财产总览</li>
-                        <hr>
-                    </ul>
                 </li>
-                <li class="item li" aria-hidden="true">
+                <li class="item li" aria-hidden="true" @click="zhanghaoguanli()">
                     <i class="icon el-icon-user-solid fa"></i>
                     账号管理
-                    <ul>
-                        <hr>
-                        <li>家庭账号</li>
-                        <li>角色管理</li>
-                        <li>权限设置</li>
-                        <hr>
-                    </ul>
                 </li>
                 <li class="item li" aria-hidden="true">
                     <i class="icon el-icon-s-goods fa"></i>
@@ -143,7 +136,7 @@
                         <hr>
                     </ul>
                 </li>
-                <li class="item li" aria-hidden="true">
+                <li class="item li" aria-hidden="true" @click="tuichu()">
                     <i class="icon el-icon-error fa"></i>
                     退出登陆
                 </li>
@@ -154,15 +147,262 @@
         <div class="right-box">
             <div class="handler"></div>
             <div class="main-body">
-                <el-tabs class="tab" v-model="editableTabsValue" closable @tab-remove="removeTab">
-                    <el-tab-pane v-for="(item, index) in editableTabs" :key="item.name" :label="item.title"
-                        :name="item.name">
-                        {{item.content}}
-                    </el-tab-pane>
-                </el-tabs>
+                <iframe src="./test/test2.html" class="mian-div main2"></iframe>
+
+                <!-- <div v-if="cardInfo.id == 2" class="mian-div main2">
+                    <div class="main2_header">
+                        <div class="main2_hearder_left">
+                            <el-avatar :size="100" src="./img/1.jpg" style="margin: 10px;"></el-avatar>
+                        </div>
+                        <div class="main2_header_right">
+
+                            <div class="main2_header_right_body">
+                                <el-input id="main2_input1" placeholder="请输入账号" v-model="xiugai.account" clearable
+                                    maxlength="10" show-word-limit :disabled="edit" size="small"></el-input>
+
+                            </div>
+                            <div class="main2_header_right_body">
+                                <el-input id="main2_input1" placeholder="请输入密码" v-model="xiugai.password" clearable
+                                    maxlength="10" show-word-limit :disabled="edit" size="small"></el-input>
+
+                            </div>
+                            <div class="main2_header_right_body">
+                                <el-input id="main2_input1" placeholder="请输入签名" v-model="xiugai.autograph" clearable
+                                    maxlength="15" show-word-limit :disabled="edit" size="small"></el-input>
+                            </div>
+
+                            <div class="main2_header_right_bottom">
+                                <el-button class="button-new-tag" size="small"
+                                    @click="main2_button_update()">编辑</el-button>
+                                <el-button class="button-new-tag" size="small"
+                                    @click="main2_button_save()">保存</el-button>
+                                <el-button class="button-new-tag" size="small"
+                                    @click="dialogFormVisible = true">添加家庭角色</el-button>
+                            </div>
+                        </div>
+                        <div class="main2_header_tag">
+                            <p>角色关系管理</p>
+                            <hr style='background-color:rgb(164, 248, 164); height:1px; border:none;' />
+                            <el-tag :key="tag" v-for="tag in dynamicTags" closable :disable-transitions="false"
+                                @close="handleClose(tag)" effect="plain">
+                                {{tag}}
+                            </el-tag>
+                            <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput"
+                                size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
+                            </el-input>
+                            <el-button v-else class="button-new-tag" size="small" @click="showInput">添加新关系</el-button>
+                        </div>
+                    </div>
+                    <div class="main2_body">
+
+                        <el-table :data="role_tableData" class="main2_table" size="small"
+                            :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}"
+                            height="580" max-height="580">
+                            <el-table-column type="index" width="50">
+                            </el-table-column>
+
+                            <el-table-column label="姓名" width="140">
+                                <template slot-scope="scope">
+                                    <div slot="reference">
+                                        <el-input size="mini" style="width: 100%;" v-model="scope.row.name"
+                                            :disabled="scope.row.disabled" @change="mian2_change(scope.row)"></el-input>
+                                    </div>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="姓别" width="70">
+                                <template slot-scope="scope">
+                                    <div slot="reference">
+                                        <el-input size="mini" style="width: 100%;" v-model="scope.row.sex"
+                                            :disabled="scope.row.disabled"
+                                            @change="mian2_change(scope.row)"></el-input></el-input>
+                                    </div>
+                                </template>
+                            </el-table-column>
+
+                            <el-table-column label="称谓" width="140">
+                                <template slot-scope="scope">
+                                    <div slot="reference">
+                                        <el-input size="mini" style="width: 100%;" v-model="scope.row.appellation"
+                                            :disabled="scope.row.disabled"
+                                            @change="mian2_change(scope.row)"></el-input></el-input>
+                                    </div>
+                                </template>
+                            </el-table-column>
+
+                            <el-table-column label="收入">
+                                <template slot-scope="scope">
+                                    <div slot="reference">
+                                        <el-input size="mini" style="width: 100%;" v-model="scope.row.income"
+                                            :disabled="scope.row.disabled"
+                                            @change="mian2_change(scope.row)"></el-input></el-input>
+                                    </div>
+                                </template>
+                            </el-table-column>
+
+                            <el-table-column label="支出">
+                                <template slot-scope="scope">
+                                    <div slot="reference">
+                                        <el-input size="mini" style="width: 100%;" v-model="scope.row.outcome"
+                                            :disabled="scope.row.disabled"
+                                            @change="mian2_change(scope.row)"></el-input></el-input>
+                                    </div>
+                                </template>
+                            </el-table-column>
+
+                            <el-table-column label="电话">
+                                <template slot-scope="scope">
+                                    <div slot="reference">
+                                        <el-input size="mini" style="width: 100%;" v-model="scope.row.telephone"
+                                            :disabled="scope.row.disabled"
+                                            @change="mian2_change(scope.row)"></el-input></el-input>
+                                    </div>
+                                </template>
+                            </el-table-column>
+
+                            <el-table-column label="微信">
+                                <template slot-scope="scope">
+                                    <div slot="reference">
+                                        <el-input size="mini" style="width: 100%;" v-model="scope.row.vx"
+                                            :disabled="scope.row.disabled"
+                                            @change="mian2_change(scope.row)"></el-input></el-input>
+                                    </div>
+                                </template>
+                            </el-table-column>
+
+                            <el-table-column label="操作" width="150">
+
+                                <template slot-scope="scope">
+                                    <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
+                                        type="primary">编辑</el-button>
+                                    <el-button size="mini" type="primary"
+                                        @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </div>
+
+                </div>
+                <div v-else-if="cardInfo.id == 31" class="mian-div">
+                    个人资金
+                </div>
+                <div v-else-if="cardInfo.id == 32" class="mian-div">
+                    固定收入
+                </div>
+                <div v-else-if="cardInfo.id == 33" class="mian-div">
+                    固定支出
+                </div>
+                <div v-else-if="cardInfo.id == 34" class="mian-div">
+                    其他收入
+                </div>
+                <div v-else-if="cardInfo.id == 35" class="mian-div">
+                    其他支出
+                </div>
+                <div v-else-if="cardInfo.id == 36" class="mian-div">
+                    收支类型
+                </div>
+                <div v-else-if="cardInfo.id == 41" class="mian-div">
+                    收入支出占比
+                </div>
+                <div v-else-if="cardInfo.id == 42" class="mian-div">
+                    每月收支趋势
+                </div>
+                <div v-else-if="cardInfo.id == 43" class="mian-div">
+                    收入类型统计
+                </div>
+                <div v-else-if="cardInfo.id == 44" class="mian-div">
+                    支出类型统计
+                </div>
+                <div v-else-if="cardInfo.id == 51" class="mian-div">
+                    计划收入
+                </div>
+                <div v-else-if="cardInfo.id == 52" class="mian-div">
+                    支出限额
+                </div>
+                <div v-else-if="cardInfo.id == 53" class="mian-div">
+                    透支详情
+                </div>
+                <div v-else-if="cardInfo.id == 61" class="mian-div">
+                    总览
+                </div>
+                <div v-else-if="cardInfo.id == 62" class="mian-div">
+                    日志
+                </div>
+                <div v-else-if="cardInfo.id == 63" class="mian-div">
+                    人物关系图谱
+                </div>
+                <div v-else-if="cardInfo.id == 64" class="mian-div">
+                    人物费用表单
+                </div>
+
+                <div v-else class="mian-div">
+                    首页
+                </div> -->
 
             </div>
         </div>
+
+        <!-- main2对话框 -->
+        <el-dialog id="main2_dialog" title="添加家庭角色" :visible.sync="dialogFormVisible" center>
+            <el-form id="main2_form" :model="form" label-width="80px">
+                <el-form-item label="姓名">
+                    <el-input class="main2_form_input" v-model="form.name"></el-input>
+                </el-form-item>
+
+                <el-form-item label="性别">
+                    <el-select v-model="form.sex" placeholder="请选择性别">
+                        <el-option v-for="option in sexOption" :label="option" :value="option"></el-option>
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item label="称谓">
+                    <el-select v-model="form.appellation" placeholder="请选择称谓，若无请添加">
+                        <el-option v-for="option in dynamicTags" :label="option" :value="option"></el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="main2_dialogFormSave()">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!-- 
+        main2编辑对话框
+        <el-dialog title="添加家庭角色" :visible.sync="dialogFormVisible2" center>
+            <el-form id="main2_form2" :model="form2" label-width="80px">
+                <el-form-item label="姓名">
+                    <el-input class="main2_form_input" v-model="form2.name"></el-input>
+                </el-form-item>
+
+                <el-form-item label="性别">
+                    <el-select v-model="form2.sex" placeholder="请选择性别">
+                        <el-option v-for="option in sexOption" :label="option" :value="option"></el-option>
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item label="称谓">
+                    <el-select v-model="form2.appellation" placeholder="请选择称谓，若无请添加">
+                        <el-option v-for="option in dynamicTags" :label="option" :value="option"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="收入">
+                    <el-input class="main2_form_input" v-model="form2.income"></el-input>
+                </el-form-item>
+                <el-form-item label="支出">
+                    <el-input class="main2_form_input" v-model="form2.outcome"></el-input>
+                </el-form-item>
+                <el-form-item label="电话">
+                    <el-input class="main2_form_input" v-model="form2.telephone"></el-input>
+                </el-form-item>
+                <el-form-item label="微信">
+                    <el-input class="main2_form_input" v-model="form2.vx"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="dialogFormVisible2 = false">取 消</el-button>
+                <el-button type="primary" @click="main2_dialogForm2Save()">确 定</el-button>
+            </div>
+        </el-dialog> -->
+
     </div>
 </body>
 <script>
@@ -170,47 +410,269 @@
     new Vue({
         el: "#app",
         data: {
-            editableTabsValue: '2',
-            editableTabs: [{
-                title: 'Tab 1',
-                name: '1',
-                content: 'Tab 1 content'
-            }, {
-                title: 'Tab 2',
-                name: '2',
-                content: 'Tab 2 content'
-            }],
-            tabIndex: 2
+            accountInfo: {
+                id: 0,
+                account: '',
+                password: '',
+                autograph: ''
+            },
+            xiugai: {
+                id: 0,
+                account: '',
+                password: '',
+                autograph: ''
+            },
+            cardInfo: {
+                id: 1,
+                name: '首页'
+            },
+            //角色的关系
+            role_tableData: [],
+            //账号管理的角色关系tag
+            dynamicTags: [],
+            inputVisible: false,
+            inputValue: '',
+            //main2的3个输入框的禁用标志
+            edit: true,
+
+            //main2对话框
+            dialogFormVisible: false,
+            sexOption: ['男', '女'],
+            form: {
+                family_accounts_account: '',
+                name: '',
+                sex: '',
+                appellation: '',
+            },
+            //main2编辑对话框2
+            // dialogFormVisible2: false,
+            // form2: {
+            //     id: 0,
+            //     family_accounts_account: '',
+            //     name: '',
+            //     sex: '',
+            //     appellation: '',
+            //     income: 0,
+            //     outcome: 0,
+            //     telephone: 0,
+            //     vx: ''
+            // },
+
         },
         methods: {
-            addTab(targetName) {
-                let newTabName = ++this.tabIndex + '';
-                this.editableTabs.push({
-                    title: 'New Tab',
-                    name: newTabName,
-                    content: 'New Tab content'
-                });
-                this.editableTabsValue = newTabName;
+            //退出登陆
+            tuichu() {
+                document.location.href = './index.html'
             },
-            removeTab(targetName) {
-                let tabs = this.editableTabs;
-                let activeName = this.editableTabsValue;
-                if (activeName === targetName) {
-                    tabs.forEach((tab, index) => {
-                        if (tab.name === targetName) {
-                            let nextTab = tabs[index + 1] || tabs[index - 1];
-                            if (nextTab) {
-                                activeName = nextTab.name;
-                            }
-                        }
-                    });
-                }
+            //li点击首页
+            shouye() {
+                this.cardInfo.id = 1;
+                this.cardInfo.name = '首页'
+            },
+            //mian2的让输入框可编辑
+            main2_button_update() {
+                this.edit = false;
+            },
+            //main2的对话框保存逻辑
+            main2_dialogFormSave() {
+                this.form.family_accounts_account = this.accountInfo.account;
+                axios.post('http://127.0.0.1:8080/system/roles/save', this.form).then((res) => {
+                    if (res.data.flag) {
+                        this.$message.success("添加角色成功!")
+                        //刷新所有角色信息
+                        this.getUserRolesInfo();
+                    } else {
+                        this.$message.error("添加角色失败");
+                    }
+                    this.dialogFormVisible = false;
 
-                this.editableTabsValue = activeName;
-                this.editableTabs = tabs.filter(tab => tab.name !== targetName);
+                })
+            },
+            //mian2的保存基本信息的编辑
+            main2_button_save() {
+                axios.post('http://127.0.0.1:8080/system/FamilyAccounts/saveBaseInfo', this.xiugai
+                ).then((res) => {
+                    console.log(res);
+                    if (res.data.flag) {
+                        this.accountInfo.account = this.xiugai.account
+                        this.accountInfo.password = this.xiugai.password
+                        this.accountInfo.autograph = this.xiugai.autograph
+                    } else {
+                        this.$message.error("基础信息修改失败");
+                    }
+                    this.edit = true;
+                })
+            },
+            // 账号管理的table编辑按钮
+            handleEdit(index, row) {
+                console.log(row)
+                if (row.disabled == false) {
+                    row.disabled = true
+                } else {
+                    row.disabled = false
+                }
+            },
+            //main2的修改角色的确认按钮
+            main2_dialogForm2Save() {
+                axios.post('http://127.0.0.1:8080/system/roles/update', this.form2).then((res) => {
+                    if (res.data.flag) {
+                        this.$message.success("修改成功!")
+                        //刷新所有角色信息
+                        this.getUserRolesInfo();
+                    } else {
+                        this.$message.error("修改失败");
+                    }
+                    this.dialogFormVisible2 = false;
+                })
+            },
+            //main2table里input失去焦点或回车保存数据事件
+            mian2_change(row) {
+                axios.post('http://127.0.0.1:8080/system/roles/update', row).then((res) => {
+                    if (res.data.flag) {
+                        this.$message.success("修改成功!")
+                        // //刷新所有角色信息
+                        // this.getUserRolesInfo();
+                    } else {
+                        this.$message.error("修改失败");
+                    }
+                    row.disabled = !row.disabled
+                    // this.dialogFormVisible2 = false;
+                })
+            },
+            // 账号管理的table删除按钮
+            handleDelete(index, row) {
+                console.log(row);
+                this.$confirm("此操作永久删除当前数据，是否继续？", "提示", {
+                    type: 'info'
+                }).then(() => {
+                    axios({
+                        url: 'http://127.0.0.1:8080/system/roles/delete/' + row.id
+                    }).then((res) => {
+                        if (res.data.flag) {
+                            //刷新所有角色信息
+                            this.getUserRolesInfo();
+                            this.$message.success("删除成功");
+                        } else {
+                            this.$message.error("删除失败");
+                        }
+                    })
+                }).catch(() => {
+                    this.$message.info("已取消");
+                })
+
+            },
+            //点击账号管理
+            zhanghaoguanli() {
+                this.cardInfo.id = 2;
+                this.cardInfo.name = '账号管理';
+                this.xiugai.id = this.accountInfo.id;
+                this.xiugai.account = this.accountInfo.account;
+                this.xiugai.password = this.accountInfo.password;
+                this.xiugai.autograph = this.accountInfo.autograph;
+                //获取所有称谓信息
+                this.getUserAppellations();
+                //获取所有角色信息
+                this.getUserRolesInfo();
+            },
+            getUserRolesInfo() {
+                //获取所有角色信息
+                axios({
+                    url: 'http://127.0.0.1:8080/system/roles/getAll'
+                }).then((res) => {
+                    console.log(res);
+                    if (res.data.flag == true) {
+                        console.log(res.data.data);
+                        this.role_tableData = res.data.data
+                    } else {
+                        this.$message.error("获取角色信息失败");
+                    }
+                })
+            },
+            getUserAppellations() {
+                axios({
+                    url: 'http://127.0.0.1:8080/system/appellations/getAll'
+                }).then((res) => {
+                    console.log(res);
+                    if (res.data.flag) {
+                        console.log(res.data.data);
+                        this.dynamicTags = res.data.data
+                    } else {
+                        this.$message.error("获取称谓信息失败");
+                    }
+                })
+            },
+            //tag的删除逻辑
+            handleClose(tag) {
+                axios({
+                    url: 'http://127.0.0.1:8080/system/appellations/delete/' + tag
+                }).then((res) => {
+                    if (!res.data.flag) {
+                        this.$message.error("tag删除失败");
+                    }
+                })
+                this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+            },
+
+            showInput() {
+                this.inputVisible = true;
+                this.$nextTick(_ => {
+                    this.$refs.saveTagInput.$refs.input.focus();
+                });
+            },
+
+            //main2的tag输入框失去焦点的事件
+            handleInputConfirm() {
+                //保存main2的tag
+                axios({
+                    url: 'http://127.0.0.1:8080/system/appellations/add/' + this.inputValue
+                }).then((res) => {
+                    if (!res.data.flag) {
+                        this.$message.error("tag保存失败");
+                    }
+                })
+
+                let inputValue = this.inputValue;
+
+                if (inputValue) {
+                    this.dynamicTags.push(inputValue);
+                }
+                this.inputVisible = false;
+                this.inputValue = '';
+            },
+            //获取账号信息
+            initUserInfo() {
+                axios({
+                    url: 'http://127.0.0.1:8080/system/FamilyAccounts/getBaseInfo'
+                }).then((res) => {
+                    console.log(res);
+                    if (res.data.flag == true) {
+                        this.accountInfo = res.data.data
+                    } else {
+                        this.$message.error("登陆失效,请重新登陆");
+                    }
+                })
             }
         },
         mounted() {
+
+
+            axios.defaults.withCredentials = true;
+            //每次请求携带token
+            let token = sessionStorage.getItem("cwgl_token")
+            axios.interceptors.request.use(
+                config => {
+                    if (token) config.headers['authorization'] = token
+                    return config
+                },
+                error => {
+                    console.log(error)
+                    return Promise.reject(error)
+                }
+            )
+            //初始化信息
+            this.initUserInfo();
+
+
 
         }
 

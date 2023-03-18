@@ -9,6 +9,15 @@ management:
       exposure:
         include: "*"  #默认只有health，开启全部
 spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    lettuce:
+      pool:
+        max-wait: 100
+        min-idle: 0
+        max-idle: 8
+        max-active: 8
   boot:
     admin:
       client:
@@ -23,9 +32,12 @@ spring:
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/FMS?serverTimezone=UTC&useSSL=false
+      url: jdbc:mysql://localhost:3306/FMS?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
       username: root
       password: hxuxingy12
+      max-active: 16
+      max-wait: 3600
+      initial-size: 8
 #  devtools:
 #    restart:
 #      exclude: application.yml,static/**,public/*
@@ -45,3 +57,9 @@ mybatis-plus:
 logging:
   pattern:
     console: "%d{MM.dd HH:ss} %clr(%p) [%clr(%-10.10t){blue}] %clr(%-25.25c){cyan} : %clr(%m) %clr(%n)"
+
+# neo4j驱动配置
+neo4j:
+  url: bolt://localhost:7687
+  password: neo4j
+  username: neo4j

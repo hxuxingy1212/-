@@ -89,11 +89,9 @@ body {
     margin-top: 40px;
     color: white;
     font-size: 15px;
-    pointer-events: none;
 }
 
 .login-box .input-box .sign-up a {
     color: #3498db;
     text-decoration: none;
-    cursor: pointer;
 }
