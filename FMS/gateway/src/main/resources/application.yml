@@ -8,17 +8,7 @@ management:
     web:
       exposure:
         include: "*"  #默认只有health，开启全部
-
 spring:
-  redis:
-    host: 127.0.0.1
-    port: 6379
-    lettuce:
-      pool:
-        max-wait: 100
-        min-idle: 0
-        max-idle: 8
-        max-active: 8
   application:
     name: gataway
   boot:
@@ -48,7 +38,7 @@ spring:
           '[/**]':
             allow-credentials: true #允许携带cookie
             allowedOriginPatterns: "*"
-            allowed-origins: "*" #允许跨域的请求，设置*为全部
+       #    allowed-origins: "*" #允许跨域的请求，设置*为全部
             allowed-headers: "*" #允许跨域请求里的head字段，设置*为全部
             allowed-methods: "*" #允许跨域的method， 默认为GET和OPTIONS，设置*为全部
             allowCredentials: true # 是否允许携带cookie

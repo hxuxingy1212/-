@@ -36,12 +36,12 @@ public class ResultBody {
 
 
     public ResultBody(boolean flag, Object data) {
-        this.flag = flag;
+        this.msg = flag ? Message.SUCCESS : Message.FAIL;
         this.data = data;
     }
 
     public ResultBody(boolean flag) {
-        this.flag = flag;
+        this.msg = flag ? Message.SUCCESS : Message.FAIL;
     }
 
     public static ResultBody error(String message) {

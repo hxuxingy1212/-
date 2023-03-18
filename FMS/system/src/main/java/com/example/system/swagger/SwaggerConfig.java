@@ -1,4 +1,4 @@
-package com.example.system.base.swagger;
+package com.example.system.swagger;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
