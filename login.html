@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登陆系统</title>
+
+    <link rel="stylesheet" href="./css/iconfont.css">
+    <link rel="stylesheet" href="./css/index.css">
+
+    <script src="./js/vue.js"></script>
+    <script src="./js/axios-0.18.0.js"></script>
+    <script src="element-ui/lib/index.js"></script>
+    <link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+</head>
+
+<body>
+
+    <div class="login-box" id="login-vue">
+        <h1>登陆</h1>
+        <div class="input-box">
+            <div class="input-text">
+                <span class='iconfont icon-mine'></span>
+                <input type="text" placeholder="账号" v-model="accountInfo.account">
+            </div>
+            <div class="input-text">
+                <span class='iconfont icon-lock'></span>
+                <input type="password" placeholder="密码" v-model="accountInfo.password">
+            </div>
+            <div class="input-btn" @click="login_check()">
+                登陆
+            </div>
+
+            <div class="sign-up">
+                还没账户？
+                <a href="register.html">立即注册</a>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+<!--vue内容-->
+<script>
+    new Vue({
+        el: "#login-vue",
+        data: {
+            accountInfo: {
+                account: '',
+                password: ''
+            },
+
+        },
+        methods: {
+            //点击登陆按钮，发送请求判断是否登陆成功
+            login_check() {
+                axios({
+                    url: 'http://127.0.0.1:8080/system/FamilyAccounts/login',
+                    params: {
+                        account: this.accountInfo.account,
+                        password: this.accountInfo.password
+                    }
+                }).then((res) => {
+                    console.log(res);
+                    if (res.data.flag == true) {
+                        // this.$message.success("登陆成功" + res.data.data);
+                        // //保存token
+                        sessionStorage.setItem("cwgl_token", res.data.data);
+                        document.location.href = './main.html'
+                    } else {
+                        this.$message.error("登陆失败");
+                    }
+                })
+            },
+        },
+        mounted() {
+            axios.defaults.withCredentials = true;
+            //每次请求携带token
+            let token = sessionStorage.getItem("cwgl_token")
+            axios.interceptors.request.use(
+                config => {
+                    if (token) config.headers['authorization'] = token
+                    return config
+                },
+                error => {
+                    console.log(error)
+                    return Promise.reject(error)
+                }
+            )
+        }
+
+    })
+</script>
+
+
+</html>

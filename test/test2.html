@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>ECharts 关系图</title>
+    <script src="../js/jquery-3.2.1.min.js"></script>
+    <script src="../js/echarts.js"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+    <script src="../js/vue.js"></script>
+    <script src="../js/axios-0.18.0.js"></script>
+    <script src="../element-ui/lib/index.js"></script>
+    <link rel="stylesheet" href="../element-ui/lib/theme-chalk/index.css">
+</head>
+
+<body>
+    <div id="node_vue" style="width: 100%;height: 100%;display: flex;">
+        <div id="left" style="background-color: black;flex: 2;"></div>
+        <div id="center" style="display: flex;flex-direction:column;flex: 7;height: 100%">
+            <div id="container" style="flex: 1;width: 100%;">
+            </div>
+            <div id="main" style="width:100%;flex: 9;"></div>
+        </div>
+        <div id="right" style="background-color: black;flex: 3;"></div>
+    </div>
+
+    <script type="text/javascript">
+        var myChart = echarts.init(document.getElementById('main'), 'dark');
+        var categories = ["a", "b"];
+        var _links = [{
+            source: 'node01',
+            target: 'node02',
+            name: 'link01',
+            des: 'link01des'
+        }, {
+            source: 'node01',
+            target: 'node03',
+            name: 'link02',
+            des: 'link02des'
+        }, {
+            source: 'node01',
+            target: 'node04',
+            name: 'link03',
+            des: 'link03des'
+        }, {
+            source: 'node01',
+            target: 'node05',
+            name: 'link04',
+            des: 'link05des'
+        }];
+        var _data = [{
+            name: 'node01',
+            des: 'nodedes01',
+            symbolSize: 70,
+            category: 0,
+        }, {
+            name: 'node02',
+            des: 'nodedes02',
+            symbolSize: 50,
+            category: 1,
+        }, {
+            name: 'node03',
+            des: 'nodedes3',
+            symbolSize: 50,
+            category: 1,
+        }, {
+            name: 'node04',
+            des: 'nodedes04',
+            symbolSize: 50,
+            category: 1,
+        }, {
+            name: 'node05',
+            des: 'nodedes05',
+            symbolSize: 50,
+            category: 1,
+        }, {
+            name: 'node07',
+            des: 'nodedes01',
+            symbolSize: 70,
+            category: 1,
+        }, {
+            name: 'node08',
+            des: 'nodedes01',
+            symbolSize: 50,
+            category: 0,
+        }];
+        option = {
+            //暗黑模式
+            darkMode: true,
+            tooltip: {
+                formatter: function (x) {
+                    return x.data.des;
+                }
+            },
+            legend: [{
+                data: categories.map(function (a) {
+                    return a.name;
+                })
+            }],
+            series: [
+                {
+                    type: 'graph', // 类型:关系图
+                    layout: 'force', //图的布局，类型为力导图
+                    symbolSize: 40, // 调整节点的大小
+                    roam: true, // 是否开启鼠标缩放和平移漫游。默认不开启。如果只想要开启缩放或者平移,可以设置成 'scale' 或者 'move'。设置成 true 为都开启
+                    edgeSymbol: ['circle', 'arrow'],
+                    edgeSymbolSize: [2, 10],
+                    emphasis: {
+                        focus: 'adjacency', //聚焦关系图中的邻接点和边的图形
+                    },
+                    edgeLabel: {
+                        normal: {
+                            textStyle: {
+                                fontSize: 20
+                            }
+                        }
+                    },
+                    force: {
+                        repulsion: 400,
+                        edgeLength: [100, 150]
+                    },
+                    draggable: true,
+                    lineStyle: {
+                        normal: {
+                            width: 2,
+                            color: 'red',
+                        }
+                    },
+                    edgeLabel: {
+                        normal: {
+                            show: true,
+                            formatter: function (x) {
+                                return x.data.name;
+                            }
+                        }
+                    },
+                    label: {
+                        normal: {
+                            show: true,
+                            textStyle: {}
+                        }
+                    },
+
+                    // 数据
+                    data: _data,
+                    links: _links,
+                    categories: ["a", "b"],
+                }]
+        };
+        myChart.setOption(option);
+        // myChart.on('click', { dataType: 'node' }, function () {
+        //     // 关系图的节点被点击时此方法被回调。
+        //     console.log('node');
+
+        //     var option = myChart.getOption();
+        //     option.series.data = [{
+        //         name: 'node01',
+        //         des: 'nodedes01',
+        //         symbolSize: 70,
+        //         category: 0,
+        //     }];
+        //     myChart.setOption(option);
+
+        // });
+        // myChart.on('click', { dataType: 'edge' }, function () {
+        //     // 关系图的边被点击时此方法被回调。
+        // });
+        // myChart.getZr().on('click', function (event) {
+        //     // 没有 target 意味着鼠标/指针不在任何一个图形元素上，它是从“空白处”触发的。
+        //     if (!event.target) {
+        //         // 点击在了空白处，做些什么。
+        //     }
+        // });
+        // myChart.on('click', (objetc) => {
+
+        // })
+    </script>
+
+    <!-- <script>
+        new Vue({
+            el: "#node_vue",
+            data: {
+                accountInfo: {
+                    account: '',
+                    password: ''
+                },
+            },
+            methods: {
+                //点击登陆按钮，发送请求判断是否登陆成功
+                login_check() {
+                    axios({
+                        url: 'http://127.0.0.1:8080/system/FamilyAccounts/login',
+                        params: {
+                            account: this.accountInfo.account,
+                            password: this.accountInfo.password
+                        }
+                    }).then((res) => {
+                        console.log(res);
+                        if (res.data.flag == true) {
+                            // this.$message.success("登陆成功" + res.data.data);
+                            // //保存token
+                            sessionStorage.setItem("cwgl_token", res.data.data);
+                            document.location.href = './main.html'
+                        } else {
+                            this.$message.error("登陆失败");
+                        }
+                    })
+                },
+            },
+            mounted() {
+                axios.defaults.withCredentials = true;
+                //每次请求携带token
+                let token = sessionStorage.getItem("cwgl_token")
+                axios.interceptors.request.use(
+                    config => {
+                        if (token) config.headers['authorization'] = token
+                        return config
+                    },
+                    error => {
+                        console.log(error)
+                        return Promise.reject(error)
+                    }
+                )
+            }
+
+        })
+    </script> -->
+</body>
+
+</html>
